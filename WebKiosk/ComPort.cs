@@ -17,7 +17,7 @@ namespace WebKiosk
                 port = new SerialPort( ); // ″COM3″ , 9600, Parity.None, 8, StopBits.One);
             port.DataReceived += new SerialDataReceivedEventHandler(sp_DataReceived);
             port.PortName = "COM3";
-            port.Open();
+            //port.Open();
 //            int databyte = port.ReadByte();
             //port.Close();
         }
@@ -39,7 +39,7 @@ namespace WebKiosk
         public void ComPort_SendK()
         {
             byte[] data = { 107 };
-            port.Write(data, 0, data.Length);
+        //    port.Write(data, 0, data.Length);
         }
 
         public void ComPort_Close()
