@@ -5,62 +5,70 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
-using System.Timers;
+using System.IO.Ports;
 
 namespace WebKiosk
 {
     public partial class Form1 : Form
     {
-//        static SerialPort _serialPort;
-        private static ComPort _com;
+        static SerialPort port;
 
-        private static System.Timers.Timer aTimer;
-
+        //private string stroka = "";
+        
         public Form1()
         {
             InitializeComponent();
-            _com = new ComPort();
-            aTimer = new System.Timers.Timer(10000);
+            port = new SerialPort(); 
+            port.DataReceived += new SerialDataReceivedEventHandler(sp_DataReceived);
+            port.PortName = "COM15";
+            port.Open();
+        }
 
-            // Hook up the Elapsed event for the timer.
-            aTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
+        private delegate void SetTextDeleg(string text);
 
-            // Set the Interval to 2 seconds (2000 milliseconds).
-            aTimer.Interval = 2000;
-            aTimer.Enabled = true;
+        private void sp_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
+        {
+            Thread.Sleep(500);
+            
+            string data = port.ReadExisting();
+            this.BeginInvoke(new SetTextDeleg(si_DataReceived), 
+                new object[] { data });
 
+            //if (stroka <> "")
+            //{
+            //    webC.ExecuteJavascript("var ratevalue = document.getElementById('ratevalue');  ratevalue.value = '" + stroka + "';");
+            //}
+        }
+
+        private void si_DataReceived(string data)
+        {
+            webC.ExecuteJavascript("var ratevalue = document.getElementById('ratevalue');  ratevalue.value = '" + data + "';");
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            webControl1.Source = new Uri("http://ya.ru");
+            webC.Source = new Uri("https://sap-prx.ugmk.com:441/ummc/kiosk");
         }
 
         private void Form1_Resize(object sender, EventArgs e)
         {
-            webControl1.Left = 0;
-            webControl1.Top = 0;
-            webControl1.Width = Width;
-            webControl1.Height = Height; 
-
+            webC.Left = 0;
+            webC.Top = 0;
+            webC.Width = Width;
+            webC.Height = Height; 
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            _com.ComPort_Close();
+            port.Close();
             Close();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            _com.ComPort_SendK();
-        }
-
-        private static void OnTimedEvent(object source, ElapsedEventArgs e)
-        {
-            _com.ComPort_SendK();
+            webC.ExecuteJavascript("var ratevalue = document.getElementById('ratevalue');  ratevalue.value = 'zzzz';");
         }
 
     }

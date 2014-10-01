@@ -29,17 +29,17 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.webControl1 = new Awesomium.Windows.Forms.WebControl(this.components);
+            this.webC = new Awesomium.Windows.Forms.WebControl(this.components);
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // webControl1
+            // webC
             // 
-            this.webControl1.Location = new System.Drawing.Point(38, 31);
-            this.webControl1.Size = new System.Drawing.Size(234, 207);
-            this.webControl1.Source = new System.Uri("http://yandex.ru/", System.UriKind.Absolute);
-            this.webControl1.TabIndex = 0;
+            this.webC.Location = new System.Drawing.Point(38, 31);
+            this.webC.Size = new System.Drawing.Size(234, 207);
+            this.webC.Source = new System.Uri("http://yandex.ru/", System.UriKind.Absolute);
+            this.webC.TabIndex = 0;
             // 
             // button1
             // 
@@ -70,7 +70,7 @@
             this.ControlBox = false;
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.webControl1);
+            this.Controls.Add(this.webC);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -87,9 +87,9 @@
 
         #endregion
 
-        private Awesomium.Windows.Forms.WebControl webControl1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
+        public Awesomium.Windows.Forms.WebControl webC;
     }
 }
 
