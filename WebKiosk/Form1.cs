@@ -15,7 +15,7 @@ namespace WebKiosk
     {
         static SerialPort port;
 
-        //private string stroka = "";
+        private string data = "";
         
         public Form1()
         {
@@ -26,25 +26,30 @@ namespace WebKiosk
             port.Open();
         }
 
-        private delegate void SetTextDeleg(string text);
+        private delegate void SetText(string text);
 
         private void sp_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
         {
-            Thread.Sleep(500);
+             Thread.Sleep(500);
             
-            string data = port.ReadExisting();
-            this.BeginInvoke(new SetTextDeleg(si_DataReceived), 
-                new object[] { data });
+             data = port.ReadExisting();
+            //this.BeginInvoke(new SetTextDeleg(si_DataReceived), 
+            //    new object[] { data });
 
+           webC.Invoke(new SetText(si_DataReceived), new object[] { data });
+//            si_DataReceived(data);
             //if (stroka <> "")
             //{
-            //    webC.ExecuteJavascript("var ratevalue = document.getElementById('ratevalue');  ratevalue.value = '" + stroka + "';");
+            //    webC.ExecuteJavascript("var ratevalue = document.getElementById('ratevalue');  ratevalue.value = 'qqq" + stroka + "zzz';");
             //}
         }
 
         private void si_DataReceived(string data)
         {
-            webC.ExecuteJavascript("var ratevalue = document.getElementById('ratevalue');  ratevalue.value = '" + data + "';");
+            //webC.Invoke() Update();
+            
+            webC.ExecuteJavascriptWithResult("var ratevalue = document.getElementById('ratevalue');  ratevalue.value = 'qqq + data + zzzz';");
+            webC.Update();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -69,6 +74,11 @@ namespace WebKiosk
         private void button2_Click(object sender, EventArgs e)
         {
             webC.ExecuteJavascript("var ratevalue = document.getElementById('ratevalue');  ratevalue.value = 'zzzz';");
+        }
+
+        private void Awesomium_Windows_Forms_WebControl_ShowCreatedWebView(object sender, Awesomium.Core.ShowCreatedWebViewEventArgs e)
+        {
+
         }
 
     }

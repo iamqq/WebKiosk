@@ -40,6 +40,7 @@
             this.webC.Size = new System.Drawing.Size(234, 207);
             this.webC.Source = new System.Uri("http://yandex.ru/", System.UriKind.Absolute);
             this.webC.TabIndex = 0;
+            this.webC.ShowCreatedWebView += new Awesomium.Core.ShowCreatedWebViewEventHandler(this.Awesomium_Windows_Forms_WebControl_ShowCreatedWebView);
             // 
             // button1
             // 
@@ -89,7 +90,7 @@
 
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
-        public Awesomium.Windows.Forms.WebControl webC;
+        private Awesomium.Windows.Forms.WebControl webC;
     }
 }
 
