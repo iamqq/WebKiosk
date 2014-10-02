@@ -44,11 +44,15 @@ namespace WebKiosk
             //}
         }
 
+        private string getProximity(string data)
+        {
+            return "zzzz";
+        }
         private void si_DataReceived(string data)
         {
             //webC.Invoke() Update();
-            
-            webC.ExecuteJavascriptWithResult("var ratevalue = document.getElementById('ratevalue');  ratevalue.value = 'qqq + data + zzzz';");
+            webC.ExecuteJavascriptWithResult("changeProximityCode('"+ getProximity(data) +"')");
+            //webC.ExecuteJavascriptWithResult("var ratevalue = document.getElementById('ratevalue');  ratevalue.value = 'qqq + data + zzzz';");
             webC.Update();
         }
 
