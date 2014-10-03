@@ -22,7 +22,7 @@ namespace WebKiosk
             InitializeComponent();
             port = new SerialPort(); 
             port.DataReceived += new SerialDataReceivedEventHandler(sp_DataReceived);
-            port.PortName = "COM15";
+            port.PortName = Properties.Settings.Default.COMPort;
             port.Open();
         }
 
@@ -31,34 +31,31 @@ namespace WebKiosk
         private void sp_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
         {
              Thread.Sleep(500);
-            
              data = port.ReadExisting();
-            //this.BeginInvoke(new SetTextDeleg(si_DataReceived), 
-            //    new object[] { data });
-
-           webC.Invoke(new SetText(si_DataReceived), new object[] { data });
-//            si_DataReceived(data);
-            //if (stroka <> "")
-            //{
-            //    webC.ExecuteJavascript("var ratevalue = document.getElementById('ratevalue');  ratevalue.value = 'qqq" + stroka + "zzz';");
-            //}
+             webC.Invoke(new SetText(si_DataReceived), new object[] { data });
         }
 
         private string getProximity(string data)
         {
-            return "zzzz";
+            if (data.Substring(8, 2) != "\r\n") return "error";  
+            string code = data.Substring(0, 8);
+            int num = Convert.ToInt32(code,16);
+            if (num == 0) return "error"; 
+            int prx = num >> 1;
+            prx = prx & 65535;
+            string ret = Convert.ToString(prx);
+            return ret;
         }
+        
         private void si_DataReceived(string data)
         {
-            //webC.Invoke() Update();
             webC.ExecuteJavascriptWithResult("changeProximityCode('"+ getProximity(data) +"')");
-            //webC.ExecuteJavascriptWithResult("var ratevalue = document.getElementById('ratevalue');  ratevalue.value = 'qqq + data + zzzz';");
             webC.Update();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            webC.Source = new Uri("https://sap-prx.ugmk.com:441/ummc/kiosk");
+            webC.Source = new Uri(Properties.Settings.Default.BaseURL);
         }
 
         private void Form1_Resize(object sender, EventArgs e)
@@ -73,16 +70,6 @@ namespace WebKiosk
         {
             port.Close();
             Close();
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            webC.ExecuteJavascript("var ratevalue = document.getElementById('ratevalue');  ratevalue.value = 'zzzz';");
-        }
-
-        private void Awesomium_Windows_Forms_WebControl_ShowCreatedWebView(object sender, Awesomium.Core.ShowCreatedWebViewEventArgs e)
-        {
-
         }
 
     }
