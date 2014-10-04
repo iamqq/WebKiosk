@@ -52,8 +52,11 @@ namespace WebKiosk
         
         private void si_DataReceived(string data)
         {
-            webC.ExecuteJavascriptWithResult("changeProximityCode('"+ getProximity(data) +"')");
-            webC.Update();
+            if (webC.IsDocumentReady)
+            { 
+                webC.ExecuteJavascriptWithResult("changeProximityCode('" + getProximity(data) + "')");
+                webC.Update();
+            }
         }
 
         private void Form1_Load(object sender, EventArgs e)
