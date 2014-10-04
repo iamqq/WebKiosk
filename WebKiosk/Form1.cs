@@ -43,6 +43,9 @@ namespace WebKiosk
             if (num == 0) return "error"; 
             int prx = num >> 1;
             prx = prx & 65535;
+            int grp = num >> 17;
+            grp = grp & 255;
+            prx = prx + grp * 100000;
             string ret = Convert.ToString(prx);
             return ret;
         }
